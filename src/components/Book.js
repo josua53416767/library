@@ -7,20 +7,31 @@ import axios from 'axios';
 class Book extends Component {
   // TODO: Buat state modal dengan nilai default false dan selectedBook dengan default {}
   state = {
-    //isi disini
+    modal: false,
+    selectedBook:{}
   }
 
   toggle = (buku) => this.setState({ modal: !this.state.modal, selectedBook: buku });
+  getStyle = () => {
+    return {
+      borderBottom: "1px #ccc dotted",
+      padding: "10 px ",
+      margin: "3px",
+      background: "#f4f4f4",
+    };
+  };
 
   // TODO: Isi fungsi untuk memanggil method PUT untuk fitur merubah status peminjaman
   EditBook = buku => {
-    // isi disini
+    axios
+      .put("https://library2020-api-josua.herokuapp.com/library/" + buku._id, buku
+      )
       .then(res => {
-        // ubah kembali state modal menjadi false
-        // this.setState()
+        this.setState({modal: false})
+        window.alert("Berhasil!");
         
         // Tampilakan window alert yang memberitahu informasi bahwa perubahan berhasil
-        // Isi disini
+        console.log(res)
         window.location.reload();
       }
       );
@@ -30,13 +41,12 @@ class Book extends Component {
   onSubmit = e => {
     e.preventDefault();
     // TODO: Panggil fungsi EditBook 
-    // isi disini
-
+    this.EditBook(this.state.selectedBook);
   };
 
   render() {
     // TODO: Buat variabel judulBuku, pengarangBuku, genreBuku, dan isDipinjam yang nilainya didapat dari props `book`
-    // isi disini
+    const{judulBuku, pengarangBuku, genreBuku, isDipinjam} = this.props.book;
 
     return (
       <div>
@@ -46,7 +56,7 @@ class Book extends Component {
             <Badge style={{ marginLeft: '5px', fontSize: '9px' }} color={isDipinjam ? "danger" : "success"}>
               {/* TODO: Buat sebuah ternary. Jika isDipinjam true menampilkan kata "Lenyap,*/}
               {/* Jika false menampilkan kata "Tersedia" */}
-              {/* isi disini */}
+              {isDipinjam ? "Lenyap" : "Tersedia"}
             </Badge>
           </CardTitle>
           <CardText style={{ fontSize: '12px' }}><b>Pengarang:</b> {pengarangBuku}</CardText>
